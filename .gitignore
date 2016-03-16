@@ -1,2 +1,7 @@
-
+.idea/
+bower_components/
 .DS_Store
+node_modules/
+photos/*
+thumbnails/*
+*.min.*
