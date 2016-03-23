@@ -1,2 +1,17 @@
 <!-- Your footer without </body></html> -->
-<script src="photopache.min.js"></script>
+<div class="pure-menu">
+	<span class="pure-menu-heading">My photos</span>
+
+	<ul class="pure-menu-list">
+		<li class="pure-menu-item"><a href="../" class="pure-menu-link">Up directory</a></li>
+	</ul>
+</div>
+
+<script src="/theme/photopache.min.js"></script>
+<script>
+	$(document).ready(function()
+	{
+		var myPhotos = new Photopache()
+		myPhotos.generateAll();
+	})
+</script>

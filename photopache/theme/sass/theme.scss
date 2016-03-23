@@ -2,5 +2,87 @@
 
 *
 {
-  font-family: $font;
+  font-family: $font !important;
+}
+
+body
+{
+  background: $background;
+}
+
+#indexlist
+{
+  display:none;
+}
+
+div.thumbnail
+{
+  height: 150px;
+  background-position: 50% 50%;
+  background-size: auto 150px;
+  transition: all 2s ease-out;
+  cursor: zoom-in;
+}
+
+div.thumbnail:hover
+{
+  background-size: auto 200px;
+  -webkit-box-shadow:inset 0 0 10px 2px $menu-color;
+  box-shadow:inset 0 0 10px 2px $menu-color;
+}
+
+.modal-cover
+{
+  background-color: $modal-cover-background;
+  position: fixed;
+  top: -100vh;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  transition: all 1s;
+}
+
+.modal
+{
+  position: absolute;
+  top:10vh;
+  bottom:10vh;
+  left:10vh;
+  right:10vh;
+  background: $modal-background;
+}
+
+.modal-visible
+{
+  top: 0vh;
+}
+
+.modal-close
+{
+  position:absolute;
+  right:8px;
+  top:6px;
+  color: $modal-close-color;
+  cursor:pointer;
+}
+
+//Theme
+.pure-menu
+{
+  background: $menu-background;
+  position:fixed;
+  top: 0px;
+  left: 0px;
+  width: $menu-width;
+  height: 100vh;
+}
+
+.pure-menu-item > a
+{
+  color: $menu-color;
+}
+
+.pure-g
+{
+  margin-left: $menu-width;
 }

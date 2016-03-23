@@ -1,3 +1,14 @@
+$UbuntuFontsPath: "/theme/fonts";
 @import "../../../bower_components/ubuntu-fontface/_ubuntu-condensed.scss";
+$font: "Ubuntu Condensed";
 
-$font: "Ubuntu";
+$menu-background: #333;
+$menu-color: #1E90FF;
+$menu-width: 200px;
+
+$background: #999;
+
+$modal-cover-background: transparentize($menu-background, 0.4);
+$modal-background: #eeeeee;
+$modal-title-background: darken($menu-background, 10%);
+$modal-close-color: #ff0000

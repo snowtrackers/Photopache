@@ -14,17 +14,17 @@
 
 ## Installation
 
-Photopache requires an Apache(2.2.11+) enabled HTTP server.
+Photopache requires an Apache(2.4+) enabled HTTP server.
 
-Let's assume you have a folder named `share` in your server root directory (the path thus being `http://mywebsite.com/share`) that you'd like to use as your listing directory:
+You should add `rewrite` and `autoindex` mods enabled.
 
-* [Download](https://github.com/snowtrackers/Photopache/archive/master.zip) and unzip Apaxy
-* Copy and paste the contents of the `/apaxy` folder to your `/share` folder.
-* Edit `htaccess.txt` (now in the `/share` folder) and update all instances of paths marked with *{FOLDERNAME}* to point to your site root.
+If there is no problem, just create a *vHost* that contains this :
 
-
-* Once done, rename `htaccess.txt` to `.htaccess` in both the `/share` and `/share/theme` folders.
-
+	<Directory /dir/dir/dir/dir/photopache/>
+		Options Indexes FollowSymLinks
+		AllowOverride All
+		Require all granted
+	</Directory>
 
 ## Tools
 
@@ -36,13 +36,33 @@ You can do nothing to use the project.
 
 To install *NPM*, [click here (Github)](https://github.com/nodesource/distributions).
 
-### Generate minified CSS & JS
+### Bower
 
-It's very hard !!!
+Use this if you want change the design :
+	
+	npm install -g bower
+	
+Update your dependencies (*CSS*/*JS*)
+
+	bower update
+	
+### Gulp
+
+*Gulp* is very important !
+
+	npm install -g gulp
+	
+Update your dependencies (JS)
+
+	npm update
+
+#### Generate minified CSS & JS
+
+It's very hard !!! (Be careful, `bower update` should be run before)
 
 	gulp
 
-### Generate thumbnails
+#### Generate thumbnails
 
 You should install some soft on your computer :
 
