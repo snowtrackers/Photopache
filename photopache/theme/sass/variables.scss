@@ -9,6 +9,7 @@ $menu-width: 200px;
 $background: #999;
 
 $modal-cover-background: transparentize($menu-background, 0.4);
-$modal-background: #eeeeee;
-$modal-title-background: darken($menu-background, 10%);
-$modal-close-color: #ff0000
+$modal-background: #000;
+$modal-close-color: #ff0000;
+$modal-title-background: transparentize($menu-background, 0.5);
+$modal-title-color: lighten($menu-background, 50%);

@@ -49,7 +49,10 @@ div.thumbnail:hover
   bottom:10vh;
   left:10vh;
   right:10vh;
-  background: $modal-background;
+  background-repeat: no-repeat;
+  background-color: $modal-background;
+  background-position: center;
+  background-size:contain;
 }
 
 .modal-visible
@@ -66,6 +69,14 @@ div.thumbnail:hover
   cursor:pointer;
 }
 
+.modal-title > h1
+{
+  background: $modal-title-background;
+  color: $modal-title-color;
+  margin-top:0px;
+  padding: 8px 0px;
+  text-align:center;
+}
 //Theme
 .pure-menu
 {

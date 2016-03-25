@@ -53,6 +53,28 @@ Photopache.prototype =
 		$("#indexlist").remove();
 	},
 
+	/**
+	 * Replace in name "-(lowerCase)" by " (lowerCase)" and "_(lowerCase)" by " (UpperCase)"
+	 * @param name The name you want to parse
+	 * @returns {string} Name formatted
+	 */
+	clearName: function(name)
+	{
+		return name.replace(/-([a-z])/, function(v) { return " " + v; }).replace(/-([a-z])/, function(v) { return " " + v.toUpperCase(); }).replace(/\/([^\/]*\/)+(.+)(\.\w+)+/, "$2");
+	},
+
+	loadImageInModal: function(id)
+	{
+		console.log(id);
+		$(".modal-title > h1").text(this.clearName(this.photos[parseInt(id)]));
+		$(".modal").attr("data-id", $(this).attr("data-id")).css("background-image", "url(" + this.photos[parseInt(id)] + ")");
+	},
+
+	findThumbail: function(link)
+	{
+		return link.replace(/(\.[a-zA-Z]+)$/, function(v) { return "-thumbnail" + v; });
+	},
+
 	generatePage: function()
 	{
 		$("<div></div>").addClass("pure-g").appendTo("body");
@@ -104,19 +126,22 @@ Photopache.prototype =
 
 	generatePictures: function()
 	{
-		for(var cpt = 0; cpt < this.photos.length; cpt++)
+		for(var i = 0; i < this.photos.length; i++)
 		{
-			$(".pure-g > div").eq(cpt % this.totalColumns).append($("<div></div>").addClass("thumbnail").css("background-image", "url(" + this.findThumbail(this.photos[cpt]) + ")").attr("data-name", this.clearName(this.photos[cpt])).attr("data-url", this.photos[cpt]));
+			$(".pure-g > div").eq(i % this.totalColumns).append($("<div></div>").addClass("thumbnail").css("background-image", "url(" + this.findThumbail(this.photos[i]) + ")").attr("data-id", i));
 		}
 
+		var that = this;
 		$(".thumbnail").click(function()
 		{
 			$(".modal-cover").addClass("modal-visible");
+			that.loadImageInModal($(this).attr("data-id"));
 		});
 	},
 
 	generateModal: function()
 	{
+		var closeModal = function() { $(".modal-cover").removeClass("modal-visible"); };
 		$("body").append(
 			$("<div></div>").addClass("modal-cover").append(
 				$("<div></div>").addClass("modal").append(
@@ -124,15 +149,16 @@ Photopache.prototype =
 						$("<span></span>").addClass("modal-close").text("X").click(
 							function()
 							{
-								$(".modal-cover").removeClass("modal-visible");
+								closeModal();
 							})
 					).append(
 						$("<h1></h1>")
 					)
-				).append(
-					$("<img />")
 				)
-			)
+			).click(function()
+			{
+				closeModal();
+			})
 		);
 	},
 
@@ -142,20 +168,5 @@ Photopache.prototype =
 		this.generateDirectories();
 		this.generatePictures();
 		this.generateModal();
-	},
-
-	/**
-	 * Replace in name "-(lowerCase)" by " (lowerCase)" and "_(lowerCase)" by " (UpperCase)"
-	 * @param name The name you want to parse
-	 * @returns {string} Name formatted
-	 */
-	clearName: function(name)
-	{
-		return name.replace(/-([a-z])/, function(v) { return " " + v; }).replace(/-([a-z])/, function(v) { return " " + v.toUpperCase(); }).replace(/\/([^\/]*\/)+(.+)(\.\w+)+/, "$2");
-	},
-
-	findThumbail: function(link)
-	{
-		return link.replace(/(\.[a-zA-Z]+)$/, function(v) { console.log("-thumbnail" + v);return "-thumbnail" + v; });
 	}
 };
