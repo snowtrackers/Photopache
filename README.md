@@ -78,6 +78,6 @@ Next, just use `gulp thumb`.
 
 ## Credits
 
-**Photopache** owes it's existence to [Servuc.fr](http://servuc.fr) by Thomas.
+**Photopache** owes it's existence to this example [Photos.servuc.fr](http://photos.servuc.fr) by Thomas.
 
 See *Apaxy* repo of this fork if you want the original version.
