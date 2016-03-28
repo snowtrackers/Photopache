@@ -54,27 +54,55 @@ Photopache.prototype =
 	},
 
 	/**
-	 * Replace in name "-(lowerCase)" by " (lowerCase)" and "_(lowerCase)" by " (UpperCase)"
+	 * Replace in name - and _ by a space and remove file extension
 	 * @param name The name you want to parse
 	 * @returns {string} Name formatted
 	 */
 	clearName: function(name)
 	{
-		return name.replace(/-([a-z])/, function(v) { return " " + v; }).replace(/-([a-z])/, function(v) { return " " + v.toUpperCase(); }).replace(/\/([^\/]*\/)+(.+)(\.\w+)+/, "$2");
+		return name.replace(/[-_]/g, " ").replace(/\.[a-zA-Z0-9]+/, "");
 	},
 
+	/**
+	 * Load the picture by it's id and load it in modal
+	 * @param id The i of array of photos (thumbnails list)
+	 */
 	loadImageInModal: function(id)
 	{
-		console.log(id);
 		$(".modal-title > h1").text(this.clearName(this.photos[parseInt(id)]));
-		$(".modal").attr("data-id", $(this).attr("data-id")).css("background-image", "url(" + this.photos[parseInt(id)] + ")");
+		$(".modal").attr("data-id", $(this).attr("data-id")).css("background-image", "url(" + encodeURI(this.photos[parseInt(id)]) + ")");
+
+		var myNewId = parseInt(id);
+		if(id == 0)
+		{
+			$(".modal-next").attr("data-load", myNewId + 1);
+			$(".modal-previous").attr("data-load", this.photos.length - 1);
+		}
+		else if(id == this.photos.length - 1)
+		{
+			$(".modal-next").attr("data-load", 0);
+			$(".modal-previous").attr("data-load", myNewId - 1);
+		}
+		else
+		{
+			$(".modal-next").attr("data-load", myNewId + 1);
+			$(".modal-previous").attr("data-load", myNewId - 1);
+		}
 	},
 
+	/**
+	 * Generate thumbnail link with encoding (spaces create bug)
+	 * @param link Actual picture link
+	 * @returns {string}
+	 */
 	findThumbail: function(link)
 	{
-		return link.replace(/(\.[a-zA-Z]+)$/, function(v) { return "-thumbnail" + v; });
+		return encodeURI(link.replace(/(\.[a-zA-Z]+)$/, function(v) { return "-thumbnail" + v; }));
 	},
 
+	/**
+	 * Generate column from pure css organisation body
+	 */
 	generatePage: function()
 	{
 		$("<div></div>").addClass("pure-g").appendTo("body");
@@ -116,6 +144,9 @@ Photopache.prototype =
 		}
 	},
 
+	/**
+	 * Generate content from left menu
+	 */
 	generateDirectories: function()
 	{
 		for(var cpt = 0; cpt < this.directories.length; cpt++)
@@ -124,13 +155,18 @@ Photopache.prototype =
 		}
 	},
 
+	/**
+	 * Add pictures to the list
+	 */
 	generatePictures: function()
 	{
+		//Add picture on each columns
 		for(var i = 0; i < this.photos.length; i++)
 		{
 			$(".pure-g > div").eq(i % this.totalColumns).append($("<div></div>").addClass("thumbnail").css("background-image", "url(" + this.findThumbail(this.photos[i]) + ")").attr("data-id", i));
 		}
 
+		//Do something on click
 		var that = this;
 		$(".thumbnail").click(function()
 		{
@@ -139,29 +175,62 @@ Photopache.prototype =
 		});
 	},
 
+	/**
+	 * Generate default modal with empty values
+	 */
 	generateModal: function()
 	{
+		var that = this;
 		var closeModal = function() { $(".modal-cover").removeClass("modal-visible"); };
 		$("body").append(
 			$("<div></div>").addClass("modal-cover").append(
 				$("<div></div>").addClass("modal").append(
 					$("<div></div>").addClass("modal-title").append(
 						$("<span></span>").addClass("modal-close").text("X").click(
-							function()
+							function(event)
 							{
+								//Close modal
+								event.stopPropagation();
 								closeModal();
 							})
 					).append(
 						$("<h1></h1>")
 					)
-				)
-			).click(function()
+				).append(
+					$("<div></div>").addClass("modal-arrow modal-previous").append(
+						$("<h1></h1>").text("←")
+					).click(function(event)
+					{
+						//Load previous picture
+						event.stopPropagation();
+						that.loadImageInModal($(this).attr("data-load"));
+					})
+				).append(
+					$("<div></div>").addClass("modal-arrow modal-next").append(
+						$("<h1></h1>").text("→")
+					).click(function(event)
+					{
+						//Load next picture
+						event.stopPropagation();
+						that.loadImageInModal($(this).attr("data-load"));
+					})
+				).click(function(event)
+				{
+					//Do nothing
+					event.stopPropagation();
+				})
+			).click(function(event)
 			{
+				//Close modal
+				event.stopPropagation();
 				closeModal();
 			})
 		);
 	},
 
+	/**
+	 * YOu should call this to generate all content in page
+	 */
 	generateAll: function()
 	{
 		this.generatePage();

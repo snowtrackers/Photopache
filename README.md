@@ -16,7 +16,7 @@
 
 Photopache requires an Apache(2.4+) enabled HTTP server.
 
-You should add `rewrite` and `autoindex` mods enabled.
+You should add `autoindex` mod enabled.
 
 If there is no problem, just create a *vHost* that contains this :
 
@@ -25,6 +25,10 @@ If there is no problem, just create a *vHost* that contains this :
 		AllowOverride All
 		Require all granted
 	</Directory>
+	
+And just paste *photopache* directory content into your web folder.
+
+For myself, use directive **ServerName** was very usefull in *vHost* configuration.
 
 ## Tools
 

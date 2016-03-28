@@ -11,8 +11,10 @@ var imageResize = require('gulp-image-resize');
 var rename = require("gulp-rename");
 var fs = require('fs-extra');
 
+//Generate minified JS and CSS
 gulp.task('default', ["js", "sass"]);
 
+//Generate minified JS
 gulp.task('js', function() {
 	return gulp.src(['photopache/theme/js/*.js', "bower_components/jquery/dist/jquery.min.js"])
 		.pipe(uglify())
@@ -20,6 +22,7 @@ gulp.task('js', function() {
 		.pipe(gulp.dest('photopache/theme/'));
 });
 
+//Generate minified CSS
 gulp.task('sass', function () {
 	var myBowerUbuntu = "bower_components/ubuntu-fontface/fonts/ubuntu-condensed-webfont.";
 	var myFontDestOrig = "photopache/theme/fonts/";
@@ -43,7 +46,14 @@ gulp.task('sass', function () {
 		.pipe(gulp.dest('photopache/theme/'));
 });
 
-gulp.task('thumb', function ()
+//Clear all thumbnail
+gulp.task('clear', function ()
+{
+	fs.removeSync('photopache/photos/**/*thumbnail*');
+});
+
+//Generate thumbnail for each picture
+gulp.task('thumb', ['clear'], function ()
 {
 	gulp.src('photopache/photos/**/*.+(jpeg|JPEG|jpg|JPG|png|PNG|gif|GIF)')
 		.pipe(imageResize({
@@ -52,9 +62,4 @@ gulp.task('thumb', function ()
 		}))
 		.pipe(rename(function (path) { path.basename += "-thumbnail"; }))
 		.pipe(gulp.dest('photopache/photos/'));
-});
-
-gulp.task('clear', function ()
-{
-	fs.removeSync('photopache/photos/**/*.+(thumbnail)\.(jpeg|JPEG|jpg|JPG|png|PNG|gif|GIF)');
 });

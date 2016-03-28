@@ -77,6 +77,28 @@ div.thumbnail:hover
   padding: 8px 0px;
   text-align:center;
 }
+
+.modal-arrow
+{
+  position: absolute;
+  background: $modal-title-background;
+  color: $modal-title-color;
+  width: 34px;
+  top: 45%;
+  text-align: center;
+  cursor:pointer;
+}
+
+.modal-previous
+{
+  left:0px;
+}
+
+.modal-next
+{
+  right:0px;
+}
+
 //Theme
 .pure-menu
 {
