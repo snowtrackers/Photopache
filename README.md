@@ -40,16 +40,10 @@ You can do nothing to use the project.
 
 To install *NPM*, [click here (Github)](https://github.com/nodesource/distributions).
 
-### Bower
-
-Use this if you want change the design :
-	
-	npm install -g bower
-	
 Update your dependencies (*CSS*/*JS*)
 
-	bower update
-	
+    npm install
+    	
 ### Gulp
 
 *Gulp* is very important !

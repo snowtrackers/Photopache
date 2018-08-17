@@ -16,15 +16,15 @@ gulp.task('default', ["js", "sass"]);
 
 //Generate minified JS
 gulp.task('js', function() {
-	return gulp.src(['photopache/theme/js/*.js', "bower_components/jquery/dist/jquery.min.js"])
-		.pipe(uglify())
+	return gulp.src(['photopache/theme/js/*.js'])
+		//.pipe(uglify())
 		.pipe(concat("photopache.min.js"))
 		.pipe(gulp.dest('photopache/theme/'));
 });
 
 //Generate minified CSS
 gulp.task('sass', function () {
-	var myBowerUbuntu = "bower_components/ubuntu-fontface/fonts/ubuntu-condensed-webfont.";
+	var myBowerUbuntu = "node_modules/ubuntu-fontface/fonts/ubuntu-condensed-webfont.";
 	var myFontDestOrig = "photopache/theme/fonts/";
 
 	fs.removeSync(myFontDestOrig);
@@ -37,7 +37,7 @@ gulp.task('sass', function () {
 	fs.copySync(myBowerUbuntu + "ttf", myFontDestOrig + "ttf");
 	fs.copySync(myBowerUbuntu + "woff", myFontDestOrig + "woff");
 
-	return gulp.src(['bower_components/pure/pure-min.css', 'photopache/theme/sass/theme.scss'])
+	return gulp.src(['photopache/theme/sass/theme.scss'])
 		.pipe(sass())
 		.pipe(uglifycss({
 			"uglyComments": true

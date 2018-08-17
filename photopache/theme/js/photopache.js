@@ -33,24 +33,24 @@ Photopache.prototype =
 	init: function()
 	{
 		var that = this;
-		$("td.indexcolname > a").each(function(index)
+        document.querySelectorAll("td.indexcolname > a").forEach(function(item, index)
 		{
-			if(index == 0)
+			if(index === 0)
 			{
 				return;
 			}
 
-			if( ! $(this).text().match("\.[a-zA-Z]+$"))
+			if( ! item.innerText.match("\.[a-zA-Z]+$"))
 			{
-				that.directories.push($(this).text());
+				that.directories.push( item.innerText );
 			}
-			else if( ! $(this).text().match("-thumbnail\.[a-zA-Z]+$"))
+			else if( ! item.innerText.match("-thumbnail\.[a-zA-Z]+$"))
 			{
-				that.photos.push($(this).text());
+				that.photos.push( item.innerText );
 			}
 		});
 
-		$("#indexlist").remove();
+		document.getElementById("indexlist").remove();
 	},
 
 	/**
@@ -69,24 +69,26 @@ Photopache.prototype =
 	 */
 	loadImageInModal: function(id)
 	{
-		$(".modal-title > h1").text(this.clearName(this.photos[parseInt(id)]));
-		$(".modal").attr("data-id", $(this).attr("data-id")).css("background-image", "url(" + encodeURI(this.photos[parseInt(id)]) + ")");
+		id = parseInt(id);
+		document.getElementById("modal-title-content").innerText = this.clearName(this.photos[parseInt(id)]);
+		document.getElementById("modal").setAttribute("data-id", id);
+		document.getElementById("modal").style.backgroundImage = "url(" + encodeURI(this.photos[parseInt(id)]) + ")";
 
 		var myNewId = parseInt(id);
-		if(id == 0)
+		if(id === 0)
 		{
-			$(".modal-next").attr("data-load", myNewId + 1);
-			$(".modal-previous").attr("data-load", this.photos.length - 1);
+			document.getElementById("modal-next").setAttribute("data-load", myNewId + 1);
+            document.getElementById("modal-previous").setAttribute("data-load", this.photos.length - 1);
 		}
-		else if(id == this.photos.length - 1)
+		else if(id === this.photos.length - 1)
 		{
-			$(".modal-next").attr("data-load", 0);
-			$(".modal-previous").attr("data-load", myNewId - 1);
+            document.getElementById("modal-next").setAttribute("data-load", 0);
+            document.getElementById("modal-previous").setAttribute("data-load", myNewId - 1);
 		}
 		else
 		{
-			$(".modal-next").attr("data-load", myNewId + 1);
-			$(".modal-previous").attr("data-load", myNewId - 1);
+            document.getElementById("modal-next").setAttribute("data-load", myNewId + 1);
+            document.getElementById("modal-previous").setAttribute("data-load", myNewId - 1);
 		}
 	},
 
@@ -105,32 +107,29 @@ Photopache.prototype =
 	 */
 	generatePage: function()
 	{
-		$("<div></div>").addClass("pure-g").appendTo("body");
+		var myNodeContent = document.createElement("div");
+		myNodeContent.classList.add("content");
 
-		this.totalColumns = 24;
-		var myScreenWidth = $(window).width();
+		this.totalColumns = 16;
+		var myScreenWidth = window.innerWidth;
 		if(myScreenWidth <= 1920)
 		{
 			this.totalColumns = 12;
 			if(myScreenWidth <= 1600)
 			{
-				this.totalColumns = 8;
+				this.totalColumns = 6;
 				if(myScreenWidth <= 1336)
 				{
-					this.totalColumns = 6;
+					this.totalColumns = 4;
 					if(myScreenWidth <= 1024)
 					{
-						this.totalColumns = 4;
+						this.totalColumns = 2;
 						if(myScreenWidth <= 640)
 						{
-							this.totalColumns = 3;
+							this.totalColumns = 2;
 							if(myScreenWidth <= 480)
 							{
-								this.totalColumns = 2;
-								if(myScreenWidth <= 320)
-								{
-									this.totalColumns = 1;
-								}
+                                this.totalColumns = 1;
 							}
 						}
 					}
@@ -138,10 +137,22 @@ Photopache.prototype =
 			}
 		}
 
-		for(var cpt = 0; cpt < this.totalColumns; cpt++)
-		{
-			$("<div></div>").addClass("pure-u-1-" + this.totalColumns).appendTo($(".pure-g"));
+		for(var i = 0; i < this.totalColumns; i++) {
+		    var myColumn = document.createElement("div");
+		    myColumn.classList.add("content-column");
+		    myNodeContent.appendChild( myColumn );
 		}
+
+        document.body.appendChild( myNodeContent );
+
+		document.getElementById("menu").addEventListener("touchend", function (ev) {
+			if( this.classList.contains("open") ) {
+				this.classList.remove("open");
+			}
+			else {
+				this.classList.add("open");
+			}
+		}, false);
 	},
 
 	/**
@@ -149,9 +160,23 @@ Photopache.prototype =
 	 */
 	generateDirectories: function()
 	{
-		for(var cpt = 0; cpt < this.directories.length; cpt++)
-		{
-			$(".pure-menu-list").append('<li class="pure-menu-item"><a href="' + this.directories[cpt] + '" class="pure-menu-link">' + this.directories[cpt] + '</a></li>');
+	    var myMasterNode = document.getElementById("menu-list");
+		for(var cpt = 0; cpt < this.directories.length; cpt++) {
+
+            var myItemIcon = document.createElement("div");
+            myItemIcon.classList.add("menu-icon");
+            myItemIcon.innerHTML = "&#x1F4C1;";
+            var myItemText = document.createElement("div");
+            myItemText.innerText = this.directories[cpt].substr(0, this.directories[cpt].length - 1);
+            myItemText.classList.add("menu-text");
+
+            var myItemLink = document.createElement("a");
+			myItemLink.href = this.directories[cpt];
+            myItemLink.classList.add("menu-entry");
+            myItemLink.appendChild( myItemIcon );
+            myItemLink.appendChild( myItemText );
+
+            myMasterNode.appendChild( myItemLink );
 		}
 	},
 
@@ -161,18 +186,46 @@ Photopache.prototype =
 	generatePictures: function()
 	{
 		//Add picture on each columns
-		for(var i = 0; i < this.photos.length; i++)
-		{
-			$(".pure-g > div").eq(i % this.totalColumns).append($("<div></div>").addClass("thumbnail").css("background-image", "url(" + this.findThumbail(this.photos[i]) + ")").attr("data-id", i));
+		var myColumns = document.getElementsByClassName("content-column");
+		var that = this;
+
+		if( this.photos.length === 0 ) {
+			document.getElementById("menu").classList.add("open")
 		}
 
-		//Do something on click
-		var that = this;
-		$(".thumbnail").click(function()
-		{
-			$(".modal-cover").addClass("modal-visible");
-			that.loadImageInModal($(this).attr("data-id"));
-		});
+		var myFuncAddPhoto = function( index ) {
+			if( index >= that.photos.length ) {
+				return;
+			}
+            var myBestColumn = 0;
+            var myLowerColumnHeight = Infinity;
+            for( var i = 0; i < myColumns.length; i++ ) {
+                var myArray = Array.from(myColumns[i].childNodes);
+                var myHeight = (myArray.length === 0) ? 0 : Array.from(myColumns[i].childNodes).map(function( item ) {
+                	return item.offsetHeight;
+				}).reduce( function (item, currentValue) {
+                    return currentValue + item;
+                });
+                if( myLowerColumnHeight > myHeight ) {
+                    myBestColumn = i;
+                    myLowerColumnHeight = myHeight;
+                }
+            }
+            var myNode = document.createElement("img");
+            myNode.classList.add("thumbnail");
+            myNode.onload = function () {
+                myFuncAddPhoto( index + 1 );
+            };
+            myNode.setAttribute("data-id", index + "");
+            myNode.setAttribute("src", that.findThumbail(that.photos[index]) );
+            myNode.addEventListener("click", function() {
+                document.getElementById("modal-cover").classList.add("modal-visible");
+                that.loadImageInModal(this.getAttribute("data-id"));
+            });
+
+            myColumns[myBestColumn].appendChild( myNode );
+		};
+		myFuncAddPhoto(0);
 	},
 
 	/**
@@ -181,51 +234,43 @@ Photopache.prototype =
 	generateModal: function()
 	{
 		var that = this;
-		var closeModal = function() { $(".modal-cover").removeClass("modal-visible"); };
-		$("body").append(
-			$("<div></div>").addClass("modal-cover").append(
-				$("<div></div>").addClass("modal").append(
-					$("<div></div>").addClass("modal-title").append(
-						$("<span></span>").addClass("modal-close").text("X").click(
-							function(event)
-							{
-								//Close modal
-								event.stopPropagation();
-								closeModal();
-							})
-					).append(
-						$("<h1></h1>")
-					)
-				).append(
-					$("<div></div>").addClass("modal-arrow modal-previous").append(
-						$("<h1></h1>").text("←")
-					).click(function(event)
-					{
-						//Load previous picture
-						event.stopPropagation();
-						that.loadImageInModal($(this).attr("data-load"));
-					})
-				).append(
-					$("<div></div>").addClass("modal-arrow modal-next").append(
-						$("<h1></h1>").text("→")
-					).click(function(event)
-					{
-						//Load next picture
-						event.stopPropagation();
-						that.loadImageInModal($(this).attr("data-load"));
-					})
-				).click(function(event)
-				{
-					//Do nothing
-					event.stopPropagation();
-				})
-			).click(function(event)
-			{
-				//Close modal
-				event.stopPropagation();
-				closeModal();
-			})
-		);
+		var closeModal = function() { document.getElementById("modal-cover").classList.remove("modal-visible"); };
+
+		document.getElementById("modal-close").addEventListener("click", function (ev) {
+            ev.stopPropagation();
+            ev.preventDefault();
+			closeModal();
+            return false;
+		});
+
+		document.getElementById("modal-previous").addEventListener("click", function (ev) {
+            //Load previous picture
+            ev.stopPropagation();
+            ev.preventDefault();
+            that.loadImageInModal(this.getAttribute("data-load"));
+            return false;
+		});
+
+        document.getElementById("modal-next").addEventListener("click", function (ev) {
+            //Load previous picture
+            ev.stopPropagation();
+            ev.preventDefault();
+            that.loadImageInModal(this.getAttribute("data-load"));
+            return false;
+        });
+
+        document.getElementById("modal").addEventListener("click", function (ev) {
+            ev.stopPropagation();
+            ev.preventDefault();
+            return false;
+		});
+
+        document.getElementById("modal-cover").addEventListener("click", function (ev) {
+            ev.stopPropagation();
+            ev.preventDefault();
+            closeModal();
+            return false;
+        });
 	},
 
 	/**

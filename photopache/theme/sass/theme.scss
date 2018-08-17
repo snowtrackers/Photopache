@@ -8,27 +8,13 @@
 body
 {
   background: $background;
+  margin: 0;
+  padding: 0;
 }
 
 #indexlist
 {
   display:none;
-}
-
-div.thumbnail
-{
-  height: 150px;
-  background-position: 50% 50%;
-  background-size: auto 150px;
-  transition: all 2s ease-out;
-  cursor: zoom-in;
-}
-
-div.thumbnail:hover
-{
-  background-size: auto 200px;
-  -webkit-box-shadow:inset 0 0 10px 2px $menu-color;
-  box-shadow:inset 0 0 10px 2px $menu-color;
 }
 
 .modal-cover
@@ -100,22 +86,85 @@ div.thumbnail:hover
 }
 
 //Theme
-.pure-menu
+.menu
 {
   background: $menu-background;
   position:fixed;
   top: 0px;
   left: 0px;
-  width: $menu-width;
+  width: 5vw;
   height: 100vh;
+  transition: all 500ms;
+
+  &:hover, &.open {
+    width: $menu-width;
+
+    .menu-heading {
+      display: block;
+    }
+  }
+
+
+  a.menu-entry,div.menu-entry {
+    width: 100%;
+    display: flex;
+    height:40px;
+    flex-wrap: wrap;
+    overflow: hidden;
+    align-items: center;
+
+    div.menu-icon {
+      min-width: 5vw;
+      font-size: 40px;
+      text-align: center;
+    }
+    div.menu-text {
+      max-width: 45vw;
+      text-overflow: ellipsis;
+    }
+  }
+
+  a {
+    color: $menu-color;
+    text-decoration: none;
+  }
+
+  .menu-heading {
+    font-weight: bold;
+    color: $menu-white;
+  }
 }
 
-.pure-menu-item > a
-{
-  color: $menu-color;
+@media screen and (max-width: 640px) {
+  div.menu-text {
+    max-width: 95vw;
+  }
+
+  .menu:hover {
+      width: 100vw;
+    }
 }
 
-.pure-g
-{
-  margin-left: $menu-width;
+
+.content {
+  margin-left: 5vw;
+  display: flex;
+  max-width: 95vw;
+  flex-direction: row;
+
+  .content-column {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+
+    img.thumbnail {
+      cursor: zoom-in;
+      width: 100%;
+    }
+
+    img.thumbnail:hover {
+      -webkit-box-shadow:inset 0 0 10px 2px $menu-color;
+      box-shadow:inset 0 0 10px 2px $menu-color;
+    }
+  }
 }

@@ -1,17 +1,36 @@
 <!-- Your footer without </body></html> -->
-<div class="pure-menu">
-	<span class="pure-menu-heading">My photos</span>
+<div id="menu" class="menu">
+	<div id="menu-list">
+		<div class="menu-entry">
+			<div class="menu-icon">&#128247;</div>
+			<div class="menu-text menu-heading">My photos</div>
+		</div>
+		<a href="/" class="menu-entry">
+			<div class="menu-icon"> &#x1F3E0;</div>
+			<div class="menu-text">Home</div>
+		</a>
+		<a href="../" class="menu-entry">
+			<div class="menu-icon">&#x2B06;</div>
+			<div class="menu-text">Up directory</div>
+		</a>
+	</div>
+</div>
 
-	<ul class="pure-menu-list">
-		<li class="pure-menu-item"><a href="../" class="pure-menu-link">Up directory</a></li>
-	</ul>
+<div class="modal-cover" id="modal-cover">
+	<div class="modal" id="modal">
+		<div class="modal-title">
+			<div class="modal-close" id="modal-close">&#10005;</div>
+			<h1 id="modal-title-content"></h1>
+		</div>
+		<div class="modal-arrow modal-previous" id="modal-previous"><h1>←</h1></div>
+		<div class="modal-arrow modal-next" id="modal-next"><h1>→</h1></div>
+	</div>
 </div>
 
 <script src="/theme/photopache.min.js"></script>
 <script>
-	$(document).ready(function()
-	{
-		var myPhotos = new Photopache()
-		myPhotos.generateAll();
-	})
+    document.addEventListener("DOMContentLoaded", function() {
+        var myPhotos = new Photopache();
+        myPhotos.generateAll();
+    });
 </script>
